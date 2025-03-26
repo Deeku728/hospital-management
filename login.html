@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Login</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #6200ea;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #007bff;
+        }
+
+        .link {
+            margin-top: 15px;
+        }
+
+        .link a {
+            color: #6200ea;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Patient Login</h2>
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <div class="link">
+            <p>Don't have an account? <a href="register.html">Register here</a></p>
+        </div>
+        <div id="errorMessage" style="color: red; margin-top: 15px;"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9Aa2mQ6J9YY4Vp832WYfWRJODV-rTq9o",
+            authDomain: "hospital-management-2ac38.firebaseapp.com",
+            projectId: "hospital-management-2ac38",
+            storageBucket: "hospital-management-2ac38.firebasestorage.app",
+            messagingSenderId: "152736874829",
+            appId: "1:152736874829:web:a60cc1840159c8403df704",
+            measurementId: "G-1HYKEPJ247"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const patientsRef = ref(database, 'patients');
+
+            get(patientsRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    let loggedIn = false;
+
+                    snapshot.forEach((childSnapshot) => {
+                        const patient = childSnapshot.val();
+                        if (patient.email === email && patient.password === password) {
+                            loggedIn = true;
+
+                            alert(`Login successful! Welcome, ${patient.fullName}`);
+                            localStorage.setItem('userId', childSnapshot.key);
+                            localStorage.setItem('userName', patient.fullName);
+                            window.location.href = 'profile.html'; // Redirect to profile page
+                        }
+                    });
+
+                    if (!loggedIn) {
+                        document.getElementById('errorMessage').innerText = "Invalid email or password. Please try again.";
+                    }
+                } else {
+                    document.getElementById('errorMessage').innerText = "No users found in the database.";
+                }
+            }).catch((error) => {
+                document.getElementById('errorMessage').innerText = "Error fetching user data: " + error.message;
+            });
+        });
+    </script>
+</body>
+
+</html>

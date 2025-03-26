@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Surgical Information</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ccc;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>View Surgical Information</h1>
+        <input type="text" id="searchInput" placeholder="Search by Patient Name or ID" onkeyup="searchTable()">
+
+        <table id="surgicalTable">
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Patient ID</th>
+                    <th>Date & Time</th>
+                    <th>OT ID</th>
+                    <th>Anesthesia & Anesthesiologist</th>
+                    <th>Medic</th>
+                    <th>Nurses</th>
+                    <th>Events</th>
+                    <th>Reports</th>
+                    <th>Remarks</th>
+                    <th>Materials</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic rows from Firebase -->
+            </tbody>
+        </table>
+    </div>
+
+    <script type="module">
+        // Firebase configuration
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9Aa2mQ6J9YY4Vp832WYfWRJODV-rTq9o",
+            authDomain: "hospital-management-2ac38.firebaseapp.com",
+            projectId: "hospital-management-2ac38",
+            storageBucket: "hospital-management-2ac38.firebasestorage.app",
+            messagingSenderId: "152736874829",
+            appId: "1:152736874829:web:a60cc1840159c8403df704",
+            measurementId: "G-1HYKEPJ247"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const surgeryRef = ref(db, 'surgeries');
+
+        onValue(surgeryRef, (snapshot) => {
+            const tableBody = document.querySelector('#surgicalTable tbody');
+            tableBody.innerHTML = ""; // Clear existing rows
+            snapshot.forEach((childSnapshot) => {
+                const data = childSnapshot.val();
+                const row = `<tr>
+                    <td>${data.patientName}</td>
+                    <td>${data.patientId}</td>
+                    <td>${data.dateTime}</td>
+                    <td>${data.otId}</td>
+                    <td>${data.anesthesia} - ${data.anesthesiologist}</td>
+                    <td>${data.medic}</td>
+                    <td>${data.nurses}</td>
+                    <td>${data.events}</td>
+                    <td>${data.reports}</td>
+                    <td>${data.remarks}</td>
+                    <td>${data.materials}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        });
+
+        function searchTable() {
+            const input = document.getElementById("searchInput").value.toLowerCase();
+            const rows = document.querySelectorAll("#surgicalTable tbody tr");
+
+            rows.forEach(row => {
+                const patientName = row.cells[0].textContent.toLowerCase();
+                const patientId = row.cells[1].textContent.toLowerCase();
+
+                // Show rows with partial or full matches in name or ID
+                if (patientName.includes(input) || patientId.includes(input)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

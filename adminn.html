@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFDEE9, #B5FFFC);
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background: #6200ea;
+            color: #fff;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .sidebar h2 {
+            text-align: center;
+        }
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            color: #fff;
+            text-decoration: none;
+            margin: 10px 0;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            background: #3700b3;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .content h1 {
+            color: #333;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 900px;
+        }
+        .card h3 {
+            margin-top: 0;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #1e90ff;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn a {
+            text-decoration: none;
+            color: #fff;
+        }
+        .btn:hover {
+            background: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div>
+        <h2>Admin Portal</h2>
+        <a href="#manage-doctor">Manage Doctor Details</a>
+        <a href="#manage-patient">Manage Patient Details</a>
+        <a href="#schedule">Post Operation Schedule Details</a>
+    </div>
+    <div>
+        <a href="index.html" class="btn">Back to Dashboard</a>
+    </div>
+</div>
+
+<div class="content">
+    <div id="manage-doctor" class="card">
+        <h3>Manage Doctor Details</h3>
+        <p>View, add, update, and delete doctor information in the hospital system.</p>
+        <button class="btn"><a href="doctor.html">Manage Doctors</a></button>
+    </div>
+
+    <div id="manage-patient" class="card">
+        <h3>Manage Registered Patient Details</h3>
+        <p>Handle patient records, medical histories, and personal information.</p>
+        <button class="btn"><a href="viewpatients.html">Manage Patients</a></button>
+    </div>
+
+    <div id="schedule" class="card">
+        <h3>Manage Operation Schedule Details</h3>
+        <p>Organize surgery schedules, OT availability, and post-op follow-ups.</p>
+        <button class="btn"><a href="surgery.html">Set Schedule</a></button>
+    </div>
+</div>
+
+</body>
+</html>

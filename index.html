@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        header {
+            background: linear-gradient(135deg, #6200ea, #9c27b0);
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            max-width: 1000px;
+            margin: 20px;
+        }
+        .heading-line {
+            font-size: 1.8em;
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        p {
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .admin-btn {
+            background: #ff6b6b;
+            color: #fff;
+        }
+        .admin-btn:hover {
+            background: #ff4757;
+            transform: translateY(-2px);
+        }
+        .user-btn {
+            background: #1e90ff;
+            color: #fff;
+        }
+        .user-btn:hover {
+            background: #007bff;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Hospital Management System</h1>
+    </header>
+    <main>
+    <div class="container">
+        <div class="heading-line">"Empowering Care, One Click at a Time!"</div>
+        <p>Your trusted platform for seamless operation scheduling and patient care. Whether you're an admin managing critical tasks or a user seeking vital information, we’ve got you covered!</p>
+        <p>Choose your portal to proceed:</p>
+        <a href="adminlogin.html" class="btn admin-btn">Admin Portal</a>
+        <a href="user.html" class="btn user-btn">User Portal</a>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Doctor Details</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #74EBD5 0%, #9FACE6 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 1000px;
+        }
+
+        h2 {
+            color: #6200ea;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ccc;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #6200ea;
+            color: white;
+        }
+
+        .btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-edit {
+            background-color: #ffca28;
+            color: #333;
+        }
+
+        .btn-delete {
+            background-color: #ff6b6b;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Manage Doctor Details</h2>
+        <form id="doctorForm">
+            <input type="text" id="name" placeholder="Doctor's Name" required>
+            <input type="text" id="specialization" placeholder="Specialization" required>
+            <input type="text" id="contact" placeholder="Contact Info" required>
+            <button type="submit" class="btn" style="background-color: #1e90ff; color: #fff;">Add Doctor</button>
+        </form>
+        <table id="doctorTable">
+            <tr>
+                <th>Name</th>
+                <th>Specialization</th>
+                <th>Contact Info</th>
+                <th>Actions</th>
+            </tr>
+        </table>
+    </div>
+
+    <script type="module">
+        // Firebase configuration
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9Aa2mQ6J9YY4Vp832WYfWRJODV-rTq9o",
+            authDomain: "hospital-management-2ac38.firebaseapp.com",
+            projectId: "hospital-management-2ac38",
+            storageBucket: "hospital-management-2ac38.firebasestorage.app",
+            messagingSenderId: "152736874829",
+            appId: "1:152736874829:web:a60cc1840159c8403df704",
+            measurementId: "G-1HYKEPJ247"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const doctorsRef = ref(db, 'doctors');
+
+        const form = document.getElementById('doctorForm');
+        const table = document.getElementById('doctorTable');
+
+        // Add Doctor to Firebase
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const specialization = document.getElementById('specialization').value;
+            const contact = document.getElementById('contact').value;
+
+            push(doctorsRef, { name, specialization, contact });
+            form.reset();
+        });
+
+        // Fetch and Display Doctors
+        onValue(doctorsRef, (snapshot) => {
+            const rows = snapshot.val();
+            table.innerHTML = `
+                <tr>
+                    <th>Name</th>
+                    <th>Specialization</th>
+                    <th>Contact Info</th>
+                    <th>Actions</th>
+                </tr>`;
+
+            for (const id in rows) {
+                const doctor = rows[id];
+                const row = table.insertRow(-1);
+                row.innerHTML = `
+                    <td>${doctor.name}</td>
+                    <td>${doctor.specialization}</td>
+                    <td>${doctor.contact}</td>
+                    <td>
+                        <button class="btn btn-edit" onclick="editDoctor('${id}')">Edit</button>
+                        <button class="btn btn-delete" onclick="deleteDoctor('${id}')">Delete</button>
+                    </td>`;
+            }
+        });
+
+        // Delete Doctor
+        window.deleteDoctor = (id) => {
+            remove(ref(db, `doctors/${id}`));
+        }
+
+        // Edit Doctor
+        window.editDoctor = (id) => {
+            const row = document.querySelector(`[data-id='${id}']`);
+            const name = prompt("Edit Doctor's Name:", row.cells[0].textContent);
+            const specialization = prompt("Edit Specialization:", row.cells[1].textContent);
+            const contact = prompt("Edit Contact Info:", row.cells[2].textContent);
+
+            if (name && specialization && contact) {
+                update(ref(db, `doctors/${id}`), { name, specialization, contact });
+            }
+        }
+    </script>
+</body>
+
+</html>
+
+
+<!-- Replace the placeholders in firebaseConfig with your actual Firebase credentials! Let me know if you’d like me to help you grab those or if you want any features added! 🚀 -->

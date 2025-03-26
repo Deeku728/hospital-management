@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Portal - Hospital Management</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        header {
+            background: linear-gradient(135deg, #1e90ff, #007bff);
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+        }
+        .btn {
+            display: block;
+            margin: 15px 0;
+            padding: 15px;
+            font-size: 1.2em;
+            text-decoration: none;
+            border-radius: 10px;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .btn.register { background: #ff6b6b; }
+        .btn.login { background: #ffa502; }
+        .btn.view-doctor { background: #1e90ff; }
+        .btn.view-surgery { background: #6200ea; }
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Portal - Hospital Management</h1>
+    </header>
+    <main>
+        <div class="container">
+            <h2>Welcome to the User Dashboard</h2>
+            <p>Manage your healthcare journey with ease.</p>
+            <a href="register.html" class="btn register">Register</a>
+            <a href="login.html" class="btn login">Login</a>
+            <a href="doctorsinfo.html" class="btn view-doctor">View Doctor Details</a>
+            <a href="viewsurgical.html" class="btn view-surgery">View Surgical Information</a>
+        </div>
+    </main>
+</body>
+</html>

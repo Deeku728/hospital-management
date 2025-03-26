@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Operation Schedule Management</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #e3f2fd;
+        }
+        h2 {
+            text-align: center;
+            color: #007bff;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h2>Post Operation Schedule Management</h2>
+    <div class="container">
+        <h3>Add Surgery Schedule</h3>
+        <input type="text" id="patientName" placeholder="Patient Name">
+        <input type="datetime-local" id="surgeryDate">
+        <input type="text" id="otNumber" placeholder="OT Number">
+        <input type="text" id="anesthesiologist" placeholder="Anesthesiologist">
+        <button onclick="addSchedule()">Add Schedule</button>
+
+        <h3>Scheduled Surgeries</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Date & Time</th>
+                    <th>OT Number</th>
+                    <th>Anesthesiologist</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="scheduleTable">
+                <!-- Dynamic rows will be added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function addSchedule() {
+            const table = document.getElementById("scheduleTable");
+            const patientName = document.getElementById("patientName").value;
+            const surgeryDate = document.getElementById("surgeryDate").value;
+            const otNumber = document.getElementById("otNumber").value;
+            const anesthesiologist = document.getElementById("anesthesiologist").value;
+
+            if (patientName && surgeryDate && otNumber && anesthesiologist) {
+                const row = table.insertRow();
+                row.innerHTML = `
+                    <td>${patientName}</td>
+                    <td>${new Date(surgeryDate).toLocaleString()}</td>
+                    <td>${otNumber}</td>
+                    <td>${anesthesiologist}</td>
+                    <td>
+                        <button onclick="editRow(this)">Edit</button>
+                        <button onclick="deleteRow(this)">Delete</button>
+                    </td>
+                `;
+
+                clearInputs();
+            } else {
+                alert("Please fill in all fields!");
+            }
+        }
+
+        function clearInputs() {
+            document.getElementById("patientName").value = "";
+            document.getElementById("surgeryDate").value = "";
+            document.getElementById("otNumber").value = "";
+            document.getElementById("anesthesiologist").value = "";
+        }
+
+        function editRow(btn) {
+            const row = btn.closest("tr");
+            const cells = row.getElementsByTagName("td");
+
+            document.getElementById("patientName").value = cells[0].innerText;
+            document.getElementById("surgeryDate").value = new Date(cells[1].innerText).toISOString().slice(0, 16);
+            document.getElementById("otNumber").value = cells[2].innerText;
+            document.getElementById("anesthesiologist").value = cells[3].innerText;
+
+            row.remove();
+        }
+
+        function deleteRow(btn) {
+            if (confirm("Are you sure you want to delete this schedule?")) {
+                btn.closest("tr").remove();
+            }
+        }
+    </script>
+</body>
+</html>

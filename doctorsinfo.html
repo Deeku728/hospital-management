@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Information</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #74EBD5 0%, #9FACE6 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #6200ea;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ccc;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #6200ea;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f3f3f3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Doctor Information</h1>
+        <table id="doctorTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Specialization</th>
+                    <th>Contact Info</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script type="module">
+        // Firebase configuration
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
+        import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9Aa2mQ6J9YY4Vp832WYfWRJODV-rTq9o",
+            authDomain: "hospital-management-2ac38.firebaseapp.com",
+            projectId: "hospital-management-2ac38",
+            storageBucket: "hospital-management-2ac38.firebasestorage.app",
+            messagingSenderId: "152736874829",
+            appId: "1:152736874829:web:a60cc1840159c8403df704",
+            measurementId: "G-1HYKEPJ247"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const doctorsRef = ref(db, 'doctors');
+
+        onValue(doctorsRef, (snapshot) => {
+            const tableBody = document.querySelector('#doctorTable tbody');
+            tableBody.innerHTML = '';
+
+            snapshot.forEach((childSnapshot) => {
+                const data = childSnapshot.val();
+                const row = `<tr>
+                    <td>${data.name}</td>
+                    <td>${data.specialization}</td>
+                    <td>${data.contact}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        });
+    </script>
+</body>
+
+</html>
+
+<!-- Let me know if you want me to add features like search, sort, or clickable rows for more details! -->

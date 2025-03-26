@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFDEE9, #B5FFFC);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 900px;
+        }
+
+        h2 {
+            color: #6200ea;
+        }
+
+        .detail {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #3700b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Welcome to Your Profile</h2>
+        <div class="profile-details">
+            <h3>Personal Details</h3>
+            <div class="detail" id="fullName">Full Name: Loading...</div>
+            <div class="detail" id="email">Email: Loading...</div>
+            <div class="detail" id="age">Age: Loading...</div>
+            <div class="detail" id="gender">Gender: Loading...</div>
+            <div class="detail" id="healthIssues">Health Issues: Loading...</div>
+        </div>
+
+        <div class="surgery-details">
+            <h3>Surgery Details</h3>
+            <div class="detail" id="surgeryInfo">Loading surgery details...</div>
+        </div>
+
+        <a href="user.html" class="btn">Back to Dashboard</a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9Aa2mQ6J9YY4Vp832WYfWRJODV-rTq9o",
+            authDomain: "hospital-management-2ac38.firebaseapp.com",
+            projectId: "hospital-management-2ac38",
+            storageBucket: "hospital-management-2ac38.firebasestorage.app",
+            messagingSenderId: "152736874829",
+            appId: "1:152736874829:web:a60cc1840159c8403df704",
+            measurementId: "G-1HYKEPJ247"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const userId = localStorage.getItem("userId");
+        if (!userId) {
+            alert("User not logged in. Redirecting to login page.");
+            window.location.href = "login.html";
+        }
+
+        // Fetch patient details
+        const fetchPatientDetails = () => {
+            const userRef = ref(db, 'patients/' + userId);
+            get(userRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    document.getElementById("fullName").textContent = "Full Name: " + (data.fullName || "N/A");
+                    document.getElementById("email").textContent = "Email: " + (data.email || "N/A");
+                    document.getElementById("age").textContent = "Age: " + (data.age || "N/A");
+                    document.getElementById("gender").textContent = "Gender: " + (data.gender || "N/A");
+                    document.getElementById("healthIssues").textContent = "Health Issues: " + (data.healthIssues || "None");
+                } else {
+                    alert("No patient data found.");
+                }
+            }).catch((error) => {
+                console.error("Error fetching patient data: ", error);
+                alert("Error fetching patient data. Please try again.");
+            });
+        };
+
+        // Fetch surgery details
+        const fetchSurgeryDetails = () => {
+            const surgeryRef = ref(db, 'surgeries/' + userId);
+            get(surgeryRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const surgeryData = snapshot.val();
+                    const surgeryInfo = `
+                        <div><strong>Patient Name:</strong> ${surgeryData.patientName || "N/A"}</div>
+                        <div><strong>Date & Time:</strong> ${surgeryData.dateTime || "N/A"}</div>
+                        <div><strong>OT ID:</strong> ${surgeryData.otId || "N/A"}</div>
+                        <div><strong>Anesthesia & Anesthesiologist:</strong> ${surgeryData.anesthesia || "N/A"} - ${surgeryData.anesthesiologist || "N/A"}</div>
+                        <div><strong>Medic:</strong> ${surgeryData.medic || "N/A"}</div>
+                        <div><strong>Nurses:</strong> ${surgeryData.nurses || "N/A"}</div>
+                        <div><strong>Events:</strong> ${surgeryData.events || "N/A"}</div>
+                        <div><strong>Reports:</strong> ${surgeryData.reports || "N/A"}</div>
+                        <div><strong>Remarks:</strong> ${surgeryData.remarks || "N/A"}</div>
+                        <div><strong>Materials:</strong> ${surgeryData.materials || "N/A"}</div>
+                    `;
+                    document.getElementById("surgeryInfo").innerHTML = surgeryInfo;
+                } else {
+                    document.getElementById("surgeryInfo").textContent = "No surgery information found.";
+                }
+            }).catch((error) => {
+                console.error("Error fetching surgery data: ", error);
+                alert("Error fetching surgery data. Please try again.");
+            });
+        };
+
+        fetchPatientDetails();
+        fetchSurgeryDetails();
+    </script>
+</body>
+
+</html>

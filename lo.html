@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surgery Details</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Surgery Details</h2>
+        <div id="details"></div>
+    </div>
+
+    <script type="module">
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9Aa2mQ6J9YY4Vp832WYfWRJODV-rTq9o",
+            authDomain: "hospital-management-2ac38.firebaseapp.com",
+            projectId: "hospital-management-2ac38",
+            storageBucket: "hospital-management-2ac38.firebasestorage.app",
+            messagingSenderId: "152736874829",
+            appId: "1:152736874829:web:a60cc1840159c8403df704",
+            measurementId: "G-1HYKEPJ247"
+        };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Fetch email from localStorage
+        const email = localStorage.getItem("loggedInEmail");
+        const detailsDiv = document.getElementById("details");
+
+        if (email) {
+            db.collection("surgeries").where("email", "==", email).get()
+                .then((querySnapshot) => {
+                    if (querySnapshot.empty) {
+                        detailsDiv.innerHTML = "<p>No surgery records found for this email.</p>";
+                    } else {
+                        querySnapshot.forEach((doc) => {
+                            const data = doc.data();
+                            detailsDiv.innerHTML += `
+                                <div class="card">
+                                    <h3>${data.patientName}</h3>
+                                    <p><strong>Surgery Date:</strong> ${data.surgeryDate}</p>
+                                    <p><strong>OT ID:</strong> ${data.otId}</p>
+                                    <p><strong>Surgery ID:</strong> ${data.surgeryId}</p>
+                                    <p><strong>Reports:</strong> ${data.reports}</p>
+                                    <p><strong>Remarks:</strong> ${data.remarks}</p>
+                                </div>
+                            `;
+                        });
+                    }
+                })
+                .catch((error) => {
+                    detailsDiv.innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+                });
+        } else {
+            detailsDiv.innerHTML = "<p>No logged-in email found. Please log in again.</p>";
+        }
+    </script>
+</body>
+
+</html>
